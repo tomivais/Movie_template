@@ -1,0 +1,14 @@
+
+    #searchResults {
+      margin-top: 20px;
+    }
+    .movie {
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+    }
+    .movie h3 {
+      margin: 0;
+      font-size: 1.2em;
+    }
