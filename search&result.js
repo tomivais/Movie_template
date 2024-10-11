@@ -1,25 +1,44 @@
 // search&result.js
 
+//My apikey
+const apiKey = 'dfbed90a';  
 
-const apiKey = 'dfbed90a';  // Api-key
 
-// Valitse HTML-elementit
 const submit = document.getElementById('submit');
 const searchResults = document.getElementById('searchResults');
 
-// Lisää tapahtumankuuntelija hakupainikkeelle
+// Lisää tapahtumankuuntelija submit buttoniin 
 submit.addEventListener('click', function() {
-    event.preventDefault();  // Estä lomakkeen oletustoiminto
+  //Estä lomakkeen lähetys
+    event.preventDefault();  
+    
   const searchQuery = document.getElementById('searchQuery').value;
+
+  //Notifivation haun alkamisesta
+  toastr.info("Searching for movies...");
 
   // Kutsu OMDb API:ta elokuvan nimellä
   fetch(`http://www.omdbapi.com/?apikey=${apiKey}&s=${searchQuery}`)
 
     .then(response => response.json())
     .then(data => {
-      displayResults(data);
+      if (data.Response === "True") {
+        displayResults(data);
+
+        //Notifivation haun onnistumisesta
+        toastr.success("Movies found!");
+      } else {
+        //Notifivation ettei tuloksia löydy
+        toastr.error(`No movies found for "${searchQuery}"`);
+
+        // Tyhjä tulos
+        searchResults.innerHTML = `<p>No results found for "${searchQuery}".</p>`;
+      }
     })
     .catch(error => {
+      //Notifivation errorista
+      toastr.error("An error occurred while searching");
+
       console.error('Error fetching data:', error);
     });
 });
@@ -28,7 +47,6 @@ submit.addEventListener('click', function() {
 function displayResults(data) {
     searchResults.innerHTML = '';  // Tyhjennä edelliset tulokset
 
-  if (data.Response === "True") {
     data.Search.forEach(movie => {
       const movieElement = document.createElement('div');
       movieElement.innerHTML = `
@@ -38,8 +56,4 @@ function displayResults(data) {
       `;
       searchResults.appendChild(movieElement);
     });
-  } else {
-    searchResults.innerHTML = `<p>No results found for "${document.getElementById('searchQuery').value}".</p>`;
-
-  }
 }
