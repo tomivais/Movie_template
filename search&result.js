@@ -1,6 +1,6 @@
 // search&result.js
 
-//My apikey
+//Oma apikey 
 const apiKey = 'dfbed90a';  
 
 
